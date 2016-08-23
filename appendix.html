@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API Reference &mdash; empyrical 0.1.9 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="empyrical 0.1.9 documentation" href="index.html"/>
+        <link rel="prev" title="Welcome to empyrical’s documentation!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> empyrical
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">empyrical</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/appendix.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="empyrical.cum_returns">
+<code class="descclassname">empyrical.</code><code class="descname">cum_returns</code><span class="sig-paren">(</span><em>returns</em>, <em>starting_value=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#cum_returns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.cum_returns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute cumulative returns from simple returns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; <p>Returns of the strategy as a percentage,
+noncumulative. Time series with decimal returns. Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">16</span>   <span class="o">-</span><span class="mf">0.012143</span>
+<span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">17</span>    <span class="mf">0.045350</span>
+<span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">18</span>    <span class="mf">0.030957</span>
+<span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">19</span>    <span class="mf">0.004902</span>
+<span class="n">Freq</span><span class="p">:</span> <span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">float64</span>
+</pre></div>
+</div>
+</li>
+<li><strong>starting_value</strong> (<em>float, optional</em>) &#8211; The starting returns.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)">pandas.Series</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.aggregate_returns">
+<code class="descclassname">empyrical.</code><code class="descname">aggregate_returns</code><span class="sig-paren">(</span><em>returns</em>, <em>convert_to</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#aggregate_returns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.aggregate_returns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregates returns by week, month, or year.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>convert_to</strong> (<a class="reference external" href="https://docs.python.org/dev/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Can be &#8216;weekly&#8217;, &#8216;monthly&#8217;, or &#8216;yearly&#8217;.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)">pandas.Series</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.max_drawdown">
+<code class="descclassname">empyrical.</code><code class="descname">max_drawdown</code><span class="sig-paren">(</span><em>returns</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#max_drawdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.max_drawdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the maximum drawdown of a strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Drawdown_(economics)">wikipedia</a>
+for more details.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.annual_return">
+<code class="descclassname">empyrical.</code><code class="descname">annual_return</code><span class="sig-paren">(</span><em>returns</em>, <em>period='daily'</em>, <em>annualization=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#annual_return"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.annual_return" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the mean annual growth rate of returns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Periodic returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>period</strong> (<em>str, optional</em>) &#8211; <p>Defines the periodicity of the &#8216;returns&#8217; data for purposes
+of annualizing. Value ignored if <cite>annualization</cite> parameter is
+specified. Defaults are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;monthly&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+ <span class="s1">&#39;weekly&#39;</span><span class="p">:</span> <span class="mi">52</span><span class="p">,</span>
+ <span class="s1">&#39;daily&#39;</span><span class="p">:</span> <span class="mi">252</span><span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><strong>annualization</strong> (<em>int, optional</em>) &#8211; Used to suppress default values available in <cite>period</cite> to convert
+returns into annual returns. Value should be the annual frequency of
+<cite>returns</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.annual_volatility">
+<code class="descclassname">empyrical.</code><code class="descname">annual_volatility</code><span class="sig-paren">(</span><em>returns</em>, <em>period='daily'</em>, <em>alpha=2.0</em>, <em>annualization=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#annual_volatility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.annual_volatility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the annual volatility of a strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Periodic returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>period</strong> (<em>str, optional</em>) &#8211; Defines the periodicity of the &#8216;returns&#8217; data for purposes of
+annualizing. Value ignored if <cite>annualization</cite> parameter is specified.
+See details in <a class="reference internal" href="#empyrical.annual_return" title="empyrical.annual_return"><code class="xref py py-func docutils literal"><span class="pre">annual_return()</span></code></a>.</li>
+<li><strong>alpha</strong> (<em>float, optional</em>) &#8211; Scaling relation (Levy stability exponent).</li>
+<li><strong>annualization</strong> (<em>int, optional</em>) &#8211; Used to suppress default values available in <cite>period</cite> to convert
+returns into annual returns. Value should be the annual frequency of
+<cite>returns</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.calmar_ratio">
+<code class="descclassname">empyrical.</code><code class="descname">calmar_ratio</code><span class="sig-paren">(</span><em>returns</em>, <em>period='daily'</em>, <em>annualization=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#calmar_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.calmar_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the calmar ratio, or drawdown ratio, of a strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>period</strong> (<em>str, optional</em>) &#8211; Defines the periodicity of the &#8216;returns&#8217; data for purposes of
+annualizing. Value ignored if <cite>annualization</cite> parameter is specified.
+See details in <a class="reference internal" href="#empyrical.annual_return" title="empyrical.annual_return"><code class="xref py py-func docutils literal"><span class="pre">annual_return()</span></code></a>.</li>
+<li><strong>annualization</strong> &#8211; int, optional
+Used to suppress default values available in <cite>period</cite> to convert
+returns into annual returns. Value should be the annual frequency of
+<cite>returns</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Calmar_ratio">wikipedia</a>
+for more details.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.omega_ratio">
+<code class="descclassname">empyrical.</code><code class="descname">omega_ratio</code><span class="sig-paren">(</span><em>returns</em>, <em>risk_free=0.0</em>, <em>required_return=0.0</em>, <em>annualization=252</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#omega_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.omega_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the omega ratio of a strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>risk_free</strong> (<em>int, float</em>) &#8211; Constant risk-free return throughout the period</li>
+<li><strong>required_return</strong> (<em>float, optional</em>) &#8211; Minimum acceptance return of the investor. Threshold over which to
+consider positive vs negative returns. It will be converted to a
+value appropriate for the period of the returns. E.g. An annual minimum
+acceptable return of 100 will translate to a minimum acceptable
+return of 0.018.</li>
+<li><strong>annualization</strong> (<em>int, optional</em>) &#8211; Factor used to convert the required_return into a daily
+value. Enter 1 if no time period conversion is necessary.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Omega_ratio">wikipedia</a>
+for more details.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.sharpe_ratio">
+<code class="descclassname">empyrical.</code><code class="descname">sharpe_ratio</code><span class="sig-paren">(</span><em>returns</em>, <em>risk_free=0</em>, <em>period='daily'</em>, <em>annualization=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#sharpe_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.sharpe_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the sharpe ratio of a strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>risk_free</strong> (<em>int, float</em>) &#8211; Constant risk-free return throughout the period.</li>
+<li><strong>period</strong> (<em>str, optional</em>) &#8211; Defines the periodicity of the &#8216;returns&#8217; data for purposes of
+annualizing. Value ignored if <cite>annualization</cite> parameter is specified.
+See details in <a class="reference internal" href="#empyrical.annual_return" title="empyrical.annual_return"><code class="xref py py-func docutils literal"><span class="pre">annual_return()</span></code></a>.</li>
+<li><strong>annualization</strong> (<em>int, optional</em>) &#8211; Used to suppress default values available in <cite>period</cite> to convert
+returns into annual returns. Value should be the annual frequency of
+<cite>returns</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float or numpy.nan</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Sharpe_ratio">wikipedia</a>
+for more details.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.sortino_ratio">
+<code class="descclassname">empyrical.</code><code class="descname">sortino_ratio</code><span class="sig-paren">(</span><em>returns</em>, <em>required_return=0</em>, <em>period='daily'</em>, <em>annualization=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#sortino_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.sortino_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the sortino ratio of a strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<em>pandas.Series or pandas.DataFrame</em>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>required_return</strong> (<em>float or pandas.Series</em>) &#8211; Minimum acceptable return</li>
+<li><strong>period</strong> (<em>str, optional</em>) &#8211; Defines the periodicity of the &#8216;returns&#8217; data for purposes of
+annualizing. Value ignored if <cite>annualization</cite> parameter is specified.
+See details in <a class="reference internal" href="#empyrical.annual_return" title="empyrical.annual_return"><code class="xref py py-func docutils literal"><span class="pre">annual_return()</span></code></a>.</li>
+<li><strong>annualization</strong> (<em>int, optional</em>) &#8211; Used to suppress default values available in <cite>period</cite> to convert
+returns into annual returns. Value should be the annual frequency of
+<cite>returns</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Depends on input type</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">pandas.Series ==&gt; float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">pandas.DataFrame ==&gt; pandas.Series</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.downside_risk">
+<code class="descclassname">empyrical.</code><code class="descname">downside_risk</code><span class="sig-paren">(</span><em>returns</em>, <em>required_return=0</em>, <em>period='daily'</em>, <em>annualization=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#downside_risk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.downside_risk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the downside deviation below a threshold</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<em>pandas.Series or pandas.DataFrame</em>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>required_return</strong> (<em>float or pandas.Series</em>) &#8211; Minimum acceptable return</li>
+<li><strong>period</strong> (<em>str, optional</em>) &#8211; Defines the periodicity of the &#8216;returns&#8217; data for purposes of
+annualizing. Value ignored if <cite>annualization</cite> parameter is specified.
+See details in <a class="reference internal" href="#empyrical.annual_return" title="empyrical.annual_return"><code class="xref py py-func docutils literal"><span class="pre">annual_return()</span></code></a>.</li>
+<li><strong>annualization</strong> (<em>int, optional</em>) &#8211; Used to suppress default values available in <cite>period</cite> to convert
+returns into annual returns. Value should be the annual frequency of
+<cite>returns</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">depends on input type</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">pandas.Series ==&gt; float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">pandas.DataFrame ==&gt; pandas.Series</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.information_ratio">
+<code class="descclassname">empyrical.</code><code class="descname">information_ratio</code><span class="sig-paren">(</span><em>returns</em>, <em>factor_returns</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#information_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.information_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the Information ratio of a strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<em>pandas.Series of pandas.Dataframe</em>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>factor_returns</strong> (<em>float or pandas.Series</em>) &#8211; Benchmark return to compare returns against.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/information_ratio">wikipedia</a>
+for more details.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.alpha_beta">
+<code class="descclassname">empyrical.</code><code class="descname">alpha_beta</code><span class="sig-paren">(</span><em>returns</em>, <em>factor_returns</em>, <em>risk_free=0.0</em>, <em>period='daily'</em>, <em>annualization=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#alpha_beta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.alpha_beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates annualized alpha and beta.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>factor_returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily noncumulative returns of the factor to which beta is
+computed. Usually a benchmark such as the market.
+This is in the same style as returns.</li>
+<li><strong>risk_free</strong> (<em>int, float, optional</em>) &#8211; Constant risk-free return throughout the period. For example, the
+interest rate on a three month us treasury bill.</li>
+<li><strong>period</strong> (<em>str, optional</em>) &#8211; Defines the periodicity of the &#8216;returns&#8217; data for purposes of
+annualizing. Value ignored if <cite>annualization</cite> parameter is specified.
+See details in <a class="reference internal" href="#empyrical.annual_return" title="empyrical.annual_return"><code class="xref py py-func docutils literal"><span class="pre">annual_return()</span></code></a>.</li>
+<li><strong>annualization</strong> (<em>int, optional</em>) &#8211; Used to suppress default values available in <cite>period</cite> to convert
+returns into annual returns. Value should be the annual frequency of
+<cite>returns</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(float, float)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.alpha">
+<code class="descclassname">empyrical.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>returns</em>, <em>factor_returns</em>, <em>risk_free=0.0</em>, <em>period='daily'</em>, <em>annualization=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates annualized alpha.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>factor_returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily noncumulative returns of the factor to which beta is
+computed. Usually a benchmark such as the market.
+This is in the same style as returns.</li>
+<li><strong>risk_free</strong> (<em>int, float, optional</em>) &#8211; Constant risk-free return throughout the period. For example, the
+interest rate on a three month us treasury bill.</li>
+<li><strong>period</strong> (<em>str, optional</em>) &#8211; Defines the periodicity of the &#8216;returns&#8217; data for purposes
+of annualizing. Value ignored if <cite>annualization</cite> parameter is
+specified. See details in <a class="reference internal" href="#empyrical.annual_return" title="empyrical.annual_return"><code class="xref py py-func docutils literal"><span class="pre">annual_return()</span></code></a>.</li>
+<li><strong>annualization</strong> (<em>int, optional</em>) &#8211; Used to suppress default values available in <cite>period</cite> to convert
+returns into annual returns. Value should be the annual frequency of
+<cite>returns</cite>.
+See full explanation in <a class="reference internal" href="#empyrical.annual_return" title="empyrical.annual_return"><code class="xref py py-func docutils literal"><span class="pre">annual_return()</span></code></a>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.beta">
+<code class="descclassname">empyrical.</code><code class="descname">beta</code><span class="sig-paren">(</span><em>returns</em>, <em>factor_returns</em>, <em>risk_free=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#beta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates beta.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</li>
+<li><strong>factor_returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily noncumulative returns of the factor to which beta is
+computed. Usually a benchmark such as the market.
+This is in the same style as returns.</li>
+<li><strong>risk_free</strong> (<em>int, float, optional</em>) &#8211; Constant risk-free return throughout the period. For example, the
+interest rate on a three month us treasury bill.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.stability_of_timeseries">
+<code class="descclassname">empyrical.</code><code class="descname">stability_of_timeseries</code><span class="sig-paren">(</span><em>returns</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#stability_of_timeseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.stability_of_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines R-squared of a linear fit to the cumulative
+log returns. Computes an ordinary least squares linear fit,
+and returns R-squared.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="empyrical.tail_ratio">
+<code class="descclassname">empyrical.</code><code class="descname">tail_ratio</code><span class="sig-paren">(</span><em>returns</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/empyrical/stats.html#tail_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#empyrical.tail_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the ratio between the right (95%) and left tail (5%).</p>
+<p>For example, a ratio of 0.25 means that losses are four times
+as bad as profits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>returns</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html#pandas.Series" title="(in pandas v0.18.1)"><em>pandas.Series</em></a>) &#8211; Daily returns of the strategy, noncumulative.
+See full explanation in <a class="reference internal" href="#empyrical.cum_returns" title="empyrical.cum_returns"><code class="xref py py-func docutils literal"><span class="pre">cum_returns()</span></code></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/dev/library/functions.html#float" title="(in Python v3.6)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to empyrical’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Quantopian Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
