@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>empyrical.stats &mdash; empyrical 0.1.9 documentation</title>
+  <title>empyrical.stats &mdash; empyrical 0.1.10 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="empyrical 0.1.9 documentation" href="../../index.html"/>
+    <link rel="top" title="empyrical 0.1.10 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -165,8 +165,28 @@
 <span class="n">ANNUALIZATION_FACTORS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">DAILY</span><span class="p">:</span> <span class="n">APPROX_BDAYS_PER_YEAR</span><span class="p">,</span>
     <span class="n">WEEKLY</span><span class="p">:</span> <span class="n">WEEKS_PER_YEAR</span><span class="p">,</span>
-    <span class="n">MONTHLY</span><span class="p">:</span> <span class="n">MONTHS_PER_YEAR</span>
+    <span class="n">MONTHLY</span><span class="p">:</span> <span class="n">MONTHS_PER_YEAR</span><span class="p">,</span>
+    <span class="n">YEARLY</span><span class="p">:</span> <span class="mi">1</span>
 <span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_adjust_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">adjustment_factor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a new :py:class:`pandas.Series` adjusted by adjustment_factor.</span>
+<span class="sd">    Optimizes for the case of adjustment_factor being 0.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
+<span class="sd">    adjustment_factor : :py:class:`pandas.Series` / :class:`float`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :py:class:`pandas.Series`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adjustment_factor</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">and</span> <span class="n">adjustment_factor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">returns</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">returns</span> <span class="o">-</span> <span class="n">adjustment_factor</span>
 
 
 <span class="k">def</span> <span class="nf">annualization_factor</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">annualization</span><span class="p">):</span>
@@ -176,18 +196,19 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    :param period:</span>
+<span class="sd">    period : :class:`str`, optional</span>
 <span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
 <span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
-<span class="sd">        See details in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type period: str</span>
-<span class="sd">    :param annualization: int, optional</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
-<span class="sd">    :type annualization: str, optional</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Annualization factor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">annualization</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -205,33 +226,47 @@
 
 
 <div class="viewcode-block" id="cum_returns"><a class="viewcode-back" href="../../appendix.html#empyrical.cum_returns">[docs]</a><span class="k">def</span> <span class="nf">cum_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">starting_value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compute cumulative returns from simple returns.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute cumulative returns from simple returns.</span>
 
-<span class="sd">    :param pandas.Series returns: Returns of the strategy as a percentage,</span>
-<span class="sd">        noncumulative. Time series with decimal returns. Example::</span>
-<span class="sd">          2015-07-16   -0.012143</span>
-<span class="sd">          2015-07-17    0.045350</span>
-<span class="sd">          2015-07-18    0.030957</span>
-<span class="sd">          2015-07-19    0.004902</span>
-<span class="sd">          Freq: D, dtype: float64</span>
-<span class="sd">    :param starting_value: The starting returns.</span>
-<span class="sd">    :type starting_value: float, optional</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
+<span class="sd">        Returns of the strategy as a percentage, noncumulative.</span>
+<span class="sd">        Time series with decimal returns.</span>
+<span class="sd">        Example::</span>
+<span class="sd">            2015-07-16    -0.012143</span>
+<span class="sd">            2015-07-17    0.045350</span>
+<span class="sd">            2015-07-20    0.030957</span>
+<span class="sd">            2015-07-21    0.004902.</span>
+<span class="sd">    starting_value : :class:`float`, optional</span>
+<span class="sd">        The starting returns.</span>
 
-<span class="sd">    :rtype: pandas.Series</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :py:class:`pandas.Series`</span>
+<span class="sd">        Series of cumulative returns.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    For increased numerical accuracy, convert input to log returns</span>
+<span class="sd">    where it is possible to sum instead of multiplying.</span>
+<span class="sd">    PI((1+r_i)) - 1 = exp(ln(PI(1+r_i)))     # x = exp(ln(x))</span>
+<span class="sd">                    = exp(SIGMA(ln(1+r_i))   # ln(a*b) = ln(a) + ln(b)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># df_price.pct_change() adds a nan in first position, we can use</span>
     <span class="c1"># that to have cum_logarithmic_returns start at the origin so that</span>
     <span class="c1"># df_cum.iloc[0] == starting_value</span>
     <span class="c1"># Note that we can&#39;t add that ourselves as we don&#39;t know which dt</span>
     <span class="c1"># to use.</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">returns</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">returns</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
 
-    <span class="c1"># For increased numerical accuracy, input is converted to log returns</span>
-    <span class="c1"># where it is possible to sum instead of multiplying.</span>
-    <span class="c1"># PI((1+r_i)) - 1 = exp(ln(PI(1+r_i)))     # x = exp(ln(x))</span>
-    <span class="c1">#                 = exp(SIGMA(ln(1+r_i))   # ln(a*b) = ln(a) + ln(b)</span>
     <span class="n">df_cum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="n">starting_value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -241,15 +276,21 @@
 
 
 <div class="viewcode-block" id="aggregate_returns"><a class="viewcode-back" href="../../appendix.html#empyrical.aggregate_returns">[docs]</a><span class="k">def</span> <span class="nf">aggregate_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">convert_to</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Aggregates returns by week, month, or year.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Aggregates returns by week, month, or year.</span>
 
-<span class="sd">    :param returns: Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :type returns: pandas.Series</span>
-<span class="sd">    :param convert_to: Can be &#39;weekly&#39;, &#39;monthly&#39;, or &#39;yearly&#39;.</span>
-<span class="sd">    :type convert_to: str</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
+<span class="sd">        Daily returns of the strategy, noncumulative.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    convert_to : :class:`str`</span>
+<span class="sd">        Can be &#39;weekly&#39;, &#39;monthly&#39;, or &#39;yearly&#39;.</span>
 
-<span class="sd">    :rtype: pandas.Series</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :py:class:`pandas.Series`</span>
+<span class="sd">        Aggregated returns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">cumulate_returns</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -270,15 +311,23 @@
 
 
 <div class="viewcode-block" id="max_drawdown"><a class="viewcode-back" href="../../appendix.html#empyrical.max_drawdown">[docs]</a><span class="k">def</span> <span class="nf">max_drawdown</span><span class="p">(</span><span class="n">returns</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Determines the maximum drawdown of a strategy.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the maximum drawdown of a strategy.</span>
 
-<span class="sd">    :param pandas.Series returns: Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
+<span class="sd">        Daily returns of the strategy, noncumulative.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Maximum drawdown.</span>
 
-<span class="sd">    See `wikipedia &lt;https://en.wikipedia.org/wiki/Drawdown_(economics)&gt;`_</span>
-<span class="sd">    for more details.</span>
+<span class="sd">    Note</span>
+<span class="sd">    -----</span>
+<span class="sd">    See https://en.wikipedia.org/wiki/Drawdown_(economics) for more details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -290,25 +339,31 @@
 
 
 <div class="viewcode-block" id="annual_return"><a class="viewcode-back" href="../../appendix.html#empyrical.annual_return">[docs]</a><span class="k">def</span> <span class="nf">annual_return</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">DAILY</span><span class="p">,</span> <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Determines the mean annual growth rate of returns.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the mean annual growth rate of returns.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Periodic returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :param period: Defines the periodicity of the &#39;returns&#39; data for purposes</span>
-<span class="sd">        of annualizing. Value ignored if `annualization` parameter is</span>
-<span class="sd">        specified. Defaults are::</span>
-<span class="sd">            {&#39;monthly&#39;: 12,</span>
-<span class="sd">             &#39;weekly&#39;: 52,</span>
+<span class="sd">        See full explanation in :func:`cum_returns`.</span>
+<span class="sd">    period : :class:`str`, optional</span>
+<span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
+<span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
+<span class="sd">        Defaults are::</span>
+<span class="sd">            {&#39;monthly&#39;:12</span>
+<span class="sd">             &#39;weekly&#39;: 52</span>
 <span class="sd">             &#39;daily&#39;: 252}</span>
-<span class="sd">    :type period: str, optional</span>
-<span class="sd">    :param annualization:</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
-<span class="sd">    :type annualization: int, optional</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Annual Return as CAGR (Compounded Annual Growth Rate).</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -327,26 +382,29 @@
 
 <div class="viewcode-block" id="annual_volatility"><a class="viewcode-back" href="../../appendix.html#empyrical.annual_volatility">[docs]</a><span class="k">def</span> <span class="nf">annual_volatility</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">DAILY</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
                       <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Determines the annual volatility of a strategy.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the annual volatility of a strategy.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
-<span class="sd">        Periodic returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :param period:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
+<span class="sd">        Daily returns of the strategy, noncumulative.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    period : :class:`str`, optional</span>
 <span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
 <span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
-<span class="sd">        See details in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type period: str, optional</span>
-<span class="sd">    :param alpha:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    alpha : :class:`float`, optional</span>
 <span class="sd">        Scaling relation (Levy stability exponent).</span>
-<span class="sd">    :type alpha: float, optional</span>
-<span class="sd">    :param annualization:</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
-<span class="sd">    :type annualization: int, optional</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Annual volatility.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
@@ -360,26 +418,33 @@
 
 
 <div class="viewcode-block" id="calmar_ratio"><a class="viewcode-back" href="../../appendix.html#empyrical.calmar_ratio">[docs]</a><span class="k">def</span> <span class="nf">calmar_ratio</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">DAILY</span><span class="p">,</span> <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Determines the calmar ratio, or drawdown ratio, of a strategy.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the Calmar ratio, or drawdown ratio, of a strategy.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :param period:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    period : :class:`str`, optional</span>
 <span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
 <span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
-<span class="sd">        See details in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type period: str, optional</span>
-<span class="sd">    :param annualization: int, optional</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
 
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Calmar ratio (drawdown ratio) as :class:`float`. Returns</span>
+<span class="sd">        numpy.nan if there is no calmar ratio.</span>
 
-<span class="sd">    See `wikipedia &lt;https://en.wikipedia.org/wiki/Calmar_ratio&gt;`_</span>
-<span class="sd">    for more details.</span>
+<span class="sd">    Note</span>
+<span class="sd">    -----</span>
+<span class="sd">    See https://en.wikipedia.org/wiki/Calmar_ratio for more details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">max_dd</span> <span class="o">=</span> <span class="n">max_drawdown</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">)</span>
@@ -400,30 +465,35 @@
 
 <div class="viewcode-block" id="omega_ratio"><a class="viewcode-back" href="../../appendix.html#empyrical.omega_ratio">[docs]</a><span class="k">def</span> <span class="nf">omega_ratio</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">required_return</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                 <span class="n">annualization</span><span class="o">=</span><span class="n">APPROX_BDAYS_PER_YEAR</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Determines the omega ratio of a strategy.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the Omega ratio of a strategy.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :param risk_free:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    risk_free : :class:`int`, :class:`float`</span>
 <span class="sd">        Constant risk-free return throughout the period</span>
-<span class="sd">    :type risk_free: int, float</span>
-<span class="sd">    :param required_return:</span>
+<span class="sd">    required_return : :class:`float`, optional</span>
 <span class="sd">        Minimum acceptance return of the investor. Threshold over which to</span>
 <span class="sd">        consider positive vs negative returns. It will be converted to a</span>
 <span class="sd">        value appropriate for the period of the returns. E.g. An annual minimum</span>
 <span class="sd">        acceptable return of 100 will translate to a minimum acceptable</span>
 <span class="sd">        return of 0.018.</span>
-<span class="sd">    :type required_return: float, optional</span>
-<span class="sd">    :param annualization:</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Factor used to convert the required_return into a daily</span>
 <span class="sd">        value. Enter 1 if no time period conversion is necessary.</span>
-<span class="sd">    :type annualization: int, optional</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Omega ratio.</span>
 
-<span class="sd">    See `wikipedia &lt;https://en.wikipedia.org/wiki/Omega_ratio&gt;`_</span>
-<span class="sd">    for more details.</span>
+<span class="sd">    Note</span>
+<span class="sd">    -----</span>
+<span class="sd">    See https://en.wikipedia.org/wiki/Omega_ratio for more details.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
@@ -450,29 +520,35 @@
 
 <div class="viewcode-block" id="sharpe_ratio"><a class="viewcode-back" href="../../appendix.html#empyrical.sharpe_ratio">[docs]</a><span class="k">def</span> <span class="nf">sharpe_ratio</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">DAILY</span><span class="p">,</span> <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Determines the sharpe ratio of a strategy.</span>
+<span class="sd">    Determines the Sharpe ratio of a strategy.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :param risk_free:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    risk_free : :class:`int`, :class:`float`</span>
 <span class="sd">        Constant risk-free return throughout the period.</span>
-<span class="sd">    :type risk_free: int, float</span>
-<span class="sd">    :param period:</span>
+<span class="sd">    period : :class:`str`, optional</span>
 <span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
 <span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
-<span class="sd">        See details in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type period: str, optional</span>
-<span class="sd">    :param annualization:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
-<span class="sd">    :type annualization: int, optional</span>
 
-<span class="sd">    :rtype: float or numpy.nan</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Sharpe ratio.</span>
+<span class="sd">    numpy.nan</span>
+<span class="sd">        If insufficient length of returns or if if adjusted returns are 0.</span>
 
-<span class="sd">    See `wikipedia &lt;https://en.wikipedia.org/wiki/Sharpe_ratio&gt;`_</span>
-<span class="sd">    for more details.</span>
+<span class="sd">    Note</span>
+<span class="sd">    -----</span>
+<span class="sd">    See https://en.wikipedia.org/wiki/Sharpe_ratio for more details.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -480,7 +556,7 @@
 
     <span class="n">ann_factor</span> <span class="o">=</span> <span class="n">annualization_factor</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">annualization</span><span class="p">)</span>
 
-    <span class="n">returns_risk_adj</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">-</span> <span class="n">risk_free</span>
+    <span class="n">returns_risk_adj</span> <span class="o">=</span> <span class="n">_adjust_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">returns_risk_adj</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
@@ -490,30 +566,35 @@
 
 
 <div class="viewcode-block" id="sortino_ratio"><a class="viewcode-back" href="../../appendix.html#empyrical.sortino_ratio">[docs]</a><span class="k">def</span> <span class="nf">sortino_ratio</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">required_return</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">DAILY</span><span class="p">,</span>
-                  <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Determines the sortino ratio of a strategy.</span>
+                  <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_downside_risk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the Sortino ratio of a strategy.</span>
 
-<span class="sd">    :param returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series` or pd.DataFrame</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :type returns: pandas.Series or pandas.DataFrame</span>
-<span class="sd">    :param required_return:</span>
-<span class="sd">        Minimum acceptable return</span>
-<span class="sd">    :type required_return: float or pandas.Series</span>
-<span class="sd">    :param period:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    required_return: :class:`float` / :py:class:`pandas.Series`</span>
+<span class="sd">        minimum acceptable return</span>
+<span class="sd">    period : :class:`str`, optional</span>
 <span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
 <span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
-<span class="sd">        See details in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type period: str, optional</span>
-<span class="sd">    :param annualization:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
-<span class="sd">    :type annualization: int, optional</span>
+<span class="sd">    _downside_risk : :class:`float`, optional</span>
+<span class="sd">        The downside risk of the given inputs, if known. Will be calculated if</span>
+<span class="sd">        not provided.</span>
 
-<span class="sd">    :returns: Depends on input type</span>
-<span class="sd">    :rtype: pandas.Series ==&gt; float</span>
-<span class="sd">    :rtype: pandas.DataFrame ==&gt; pandas.Series</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float` or :py:class:`pandas.Series`</span>
+
+<span class="sd">        Annualized Sortino ratio.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
@@ -524,8 +605,11 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="n">mu</span> <span class="o">=</span> <span class="n">nanmean</span><span class="p">(</span><span class="n">returns</span> <span class="o">-</span> <span class="n">required_return</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">sortino</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">/</span> <span class="n">downside_risk</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">required_return</span><span class="p">)</span>
+    <span class="n">adj_returns</span> <span class="o">=</span> <span class="n">_adjust_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">required_return</span><span class="p">)</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">nanmean</span><span class="p">(</span><span class="n">adj_returns</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dsr</span> <span class="o">=</span> <span class="p">(</span><span class="n">_downside_risk</span> <span class="k">if</span> <span class="n">_downside_risk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+           <span class="k">else</span> <span class="n">downside_risk</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">required_return</span><span class="p">))</span>
+    <span class="n">sortino</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">/</span> <span class="n">dsr</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">sortino</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">sortino</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">sortino</span> <span class="o">*</span> <span class="n">ann_factor</span></div>
@@ -533,29 +617,31 @@
 
 <div class="viewcode-block" id="downside_risk"><a class="viewcode-back" href="../../appendix.html#empyrical.downside_risk">[docs]</a><span class="k">def</span> <span class="nf">downside_risk</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">required_return</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">DAILY</span><span class="p">,</span>
                   <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Determines the downside deviation below a threshold</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the downside deviation below a threshold</span>
 
-<span class="sd">    :param returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series` or pd.DataFrame</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :type returns: pandas.Series or pandas.DataFrame</span>
-<span class="sd">    :param required_return:</span>
-<span class="sd">        Minimum acceptable return</span>
-<span class="sd">    :type required_return: float or pandas.Series</span>
-<span class="sd">    :param period:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    required_return: :class:`float` / :py:class:`pandas.Series`</span>
+<span class="sd">        minimum acceptable return</span>
+<span class="sd">    period : :class:`str`, optional</span>
 <span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
 <span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
-<span class="sd">        See details in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type period: str, optional</span>
-<span class="sd">    :param annualization:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
-<span class="sd">    :type annualization: int, optional</span>
 
-<span class="sd">    :returns: depends on input type</span>
-<span class="sd">    :rtype: pandas.Series ==&gt; float</span>
-<span class="sd">    :rtype: pandas.DataFrame ==&gt; pandas.Series</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`, or :py:class:`pandas.Series`</span>
+
+<span class="sd">        Annualized downside deviation</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -563,7 +649,7 @@
 
     <span class="n">ann_factor</span> <span class="o">=</span> <span class="n">annualization_factor</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">annualization</span><span class="p">)</span>
 
-    <span class="n">downside_diff</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">-</span> <span class="n">required_return</span>
+    <span class="n">downside_diff</span> <span class="o">=</span> <span class="n">_adjust_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">required_return</span><span class="p">)</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">downside_diff</span> <span class="o">&gt;</span> <span class="mi">0</span>
     <span class="n">downside_diff</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">squares</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">downside_diff</span><span class="p">)</span>
@@ -575,26 +661,31 @@
 
 
 <div class="viewcode-block" id="information_ratio"><a class="viewcode-back" href="../../appendix.html#empyrical.information_ratio">[docs]</a><span class="k">def</span> <span class="nf">information_ratio</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Determines the Information ratio of a strategy.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the Information ratio of a strategy.</span>
 
-<span class="sd">    :param returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series` or pd.DataFrame</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :type returns: pandas.Series of pandas.Dataframe</span>
-<span class="sd">    :param factor_returns:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    factor_returns: :class:`float` / :py:class:`pandas.Series`</span>
 <span class="sd">        Benchmark return to compare returns against.</span>
-<span class="sd">    :type factor_returns: float or pandas.Series</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        The information ratio.</span>
 
-<span class="sd">    See `wikipedia &lt;https://en.wikipedia.org/wiki/information_ratio&gt;`_</span>
-<span class="sd">    for more details.</span>
+<span class="sd">    Note</span>
+<span class="sd">    -----</span>
+<span class="sd">    See https://en.wikipedia.org/wiki/information_ratio for more details.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="n">active_return</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">-</span> <span class="n">factor_returns</span>
+    <span class="n">active_return</span> <span class="o">=</span> <span class="n">_adjust_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">)</span>
     <span class="n">tracking_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">active_return</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">tracking_error</span><span class="p">):</span>
         <span class="k">return</span> <span class="mf">0.0</span>
@@ -607,104 +698,126 @@
                <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculates annualized alpha and beta.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :param pandas.Series factor_returns:</span>
-<span class="sd">         Daily noncumulative returns of the factor to which beta is</span>
-<span class="sd">         computed. Usually a benchmark such as the market.</span>
-<span class="sd">         This is in the same style as returns.</span>
-<span class="sd">    :param risk_free:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    factor_returns : :py:class:`pandas.Series`</span>
+<span class="sd">        Daily noncumulative returns of the factor to which beta is</span>
+<span class="sd">        computed. Usually a benchmark such as the market.</span>
+<span class="sd">        This is in the same style as returns.</span>
+<span class="sd">    risk_free : :class:`int`, :class:`float`, optional</span>
 <span class="sd">        Constant risk-free return throughout the period. For example, the</span>
 <span class="sd">        interest rate on a three month us treasury bill.</span>
-<span class="sd">    :type risk_free: int, float, optional</span>
-<span class="sd">    :param period:</span>
+<span class="sd">    period : :class:`str`, optional</span>
 <span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
 <span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
-<span class="sd">        See details in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type period: str, optional</span>
-<span class="sd">    :param annualization:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
-<span class="sd">    :type annualization: int, optional</span>
 
-<span class="sd">    :rtype: (float, float)</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Alpha.</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Beta.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">b</span> <span class="o">=</span> <span class="n">beta</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">)</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">annualization</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">annualization</span><span class="p">,</span>
+              <span class="n">_beta</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span></div>
 
 
 <div class="viewcode-block" id="alpha"><a class="viewcode-back" href="../../appendix.html#empyrical.alpha">[docs]</a><span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">DAILY</span><span class="p">,</span>
-          <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+          <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_beta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculates annualized alpha.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :param pandas.Series factor_returns:</span>
-<span class="sd">         Daily noncumulative returns of the factor to which beta is</span>
-<span class="sd">         computed. Usually a benchmark such as the market.</span>
-<span class="sd">         This is in the same style as returns.</span>
-<span class="sd">    :param risk_free:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    factor_returns : :py:class:`pandas.Series`</span>
+<span class="sd">        Daily noncumulative returns of the factor to which beta is</span>
+<span class="sd">        computed. Usually a benchmark such as the market.</span>
+<span class="sd">        This is in the same style as returns.</span>
+<span class="sd">    risk_free : :class:`int`, :class:`float`, optional</span>
 <span class="sd">        Constant risk-free return throughout the period. For example, the</span>
 <span class="sd">        interest rate on a three month us treasury bill.</span>
-<span class="sd">    :type risk_free: int, float, optional</span>
-<span class="sd">    :param period: Defines the periodicity of the &#39;returns&#39; data for purposes</span>
-<span class="sd">        of annualizing. Value ignored if `annualization` parameter is</span>
-<span class="sd">        specified. See details in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type period: str, optional</span>
-<span class="sd">    :param annualization:</span>
+<span class="sd">    period : :class:`str`, optional</span>
+<span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
+<span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
 <span class="sd">        Used to suppress default values available in `period` to convert</span>
 <span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
 <span class="sd">        `returns`.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.annual_return`.</span>
-<span class="sd">    :type annualization: int, optional</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    _beta : :class:`float`, optional</span>
+<span class="sd">        The beta for the given inputs, if already known. Will be calculated</span>
+<span class="sd">        internally if not provided.</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Alpha.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
     <span class="n">ann_factor</span> <span class="o">=</span> <span class="n">annualization_factor</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">annualization</span><span class="p">)</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">beta</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">)</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">-</span> <span class="n">risk_free</span> <span class="o">-</span> <span class="n">b</span><span class="o">*</span><span class="p">(</span><span class="n">factor_returns</span> <span class="o">-</span> <span class="n">risk_free</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">alpha</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="n">ann_factor</span></div>
+
+    <span class="k">if</span> <span class="n">_beta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">beta</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">_beta</span>
+
+    <span class="n">adj_returns</span> <span class="o">=</span> <span class="n">_adjust_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">)</span>
+    <span class="n">adj_factor_returns</span> <span class="o">=</span> <span class="n">_adjust_returns</span><span class="p">(</span><span class="n">factor_returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">)</span>
+    <span class="n">alpha_series</span> <span class="o">=</span> <span class="n">adj_returns</span> <span class="o">-</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">adj_factor_returns</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">alpha_series</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="n">ann_factor</span></div>
 
 
 <div class="viewcode-block" id="beta"><a class="viewcode-back" href="../../appendix.html#empyrical.beta">[docs]</a><span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">factor_returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculates beta.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
-<span class="sd">    :param pandas.Series factor_returns:</span>
-<span class="sd">         Daily noncumulative returns of the factor to which beta is</span>
-<span class="sd">         computed. Usually a benchmark such as the market.</span>
-<span class="sd">         This is in the same style as returns.</span>
-<span class="sd">    :param risk_free:</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    factor_returns : :py:class:`pandas.Series`</span>
+<span class="sd">        Daily noncumulative returns of the factor to which beta is</span>
+<span class="sd">        computed. Usually a benchmark such as the market.</span>
+<span class="sd">        This is in the same style as returns.</span>
+<span class="sd">    risk_free : :class:`int`, :class:`float`, optional</span>
 <span class="sd">        Constant risk-free return throughout the period. For example, the</span>
 <span class="sd">        interest rate on a three month us treasury bill.</span>
-<span class="sd">    :type risk_free: int, float, optional</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        Beta.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># Filter out dates with numpy.nan as a return value</span>
-    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span>
-        <span class="n">returns</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
-        <span class="n">factor_returns</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">factor_returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="c1"># Filter out dates with np.nan as a return value</span>
+    <span class="n">joint</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">_adjust_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">risk_free</span><span class="p">),</span>
+                       <span class="n">factor_returns</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="n">covar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">returns</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span><span class="o">-</span><span class="n">risk_free</span><span class="p">,</span>
-                   <span class="n">factor_returns</span><span class="p">[</span><span class="n">indices</span><span class="p">],</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="n">var</span><span class="p">()</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1.0e-30</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="k">return</span> <span class="n">covar</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">factor_returns</span><span class="p">[</span><span class="n">indices</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="stability_of_timeseries"><a class="viewcode-back" href="../../appendix.html#empyrical.stability_of_timeseries">[docs]</a><span class="k">def</span> <span class="nf">stability_of_timeseries</span><span class="p">(</span><span class="n">returns</span><span class="p">):</span>
@@ -712,15 +825,22 @@
 <span class="sd">    log returns. Computes an ordinary least squares linear fit,</span>
 <span class="sd">    and returns R-squared.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        R-squared.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
 
     <span class="n">cum_log_returns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
     <span class="n">rhat</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cum_log_returns</span><span class="p">)),</span>
@@ -735,18 +855,64 @@
 <span class="sd">    For example, a ratio of 0.25 means that losses are four times</span>
 <span class="sd">    as bad as profits.</span>
 
-<span class="sd">    :param pandas.Series returns:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
 <span class="sd">        Daily returns of the strategy, noncumulative.</span>
-<span class="sd">        See full explanation in :func:`~empyrical.cum_returns`.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
 
-<span class="sd">    :rtype: float</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`</span>
+<span class="sd">        tail ratio</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
+    <span class="c1"># Be tolerant of nan&#39;s</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="mi">95</span><span class="p">))</span> <span class="o">/</span> \
         <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="cagr"><a class="viewcode-back" href="../../appendix.html#empyrical.cagr">[docs]</a><span class="k">def</span> <span class="nf">cagr</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">DAILY</span><span class="p">,</span> <span class="n">annualization</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute compound annual growth rate.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns : :py:class:`pandas.Series`</span>
+<span class="sd">        Daily returns of the strategy, noncumulative.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.cum_returns`.</span>
+<span class="sd">    period : :class:`str`, optional</span>
+<span class="sd">        Defines the periodicity of the &#39;returns&#39; data for purposes of</span>
+<span class="sd">        annualizing. Value ignored if `annualization` parameter is specified.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+<span class="sd">    annualization : :class:`int`, optional</span>
+<span class="sd">        Used to suppress default values available in `period` to convert</span>
+<span class="sd">        returns into annual returns. Value should be the annual frequency of</span>
+<span class="sd">        `returns`.</span>
+<span class="sd">        See full explanation in :func:`~empyrical.stats.annual_return`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`float`, numpy.nan</span>
+<span class="sd">        The CAGR value.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">ann_factor</span> <span class="o">=</span> <span class="n">annualization_factor</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">annualization</span><span class="p">)</span>
+    <span class="n">no_years</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">ann_factor</span><span class="p">)</span>
+    <span class="n">ending_value</span> <span class="o">=</span> <span class="n">cum_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">starting_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">ending_value</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">no_years</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span></div>
 
 
 <span class="n">SIMPLE_STAT_FUNCS</span> <span class="o">=</span> <span class="p">[</span>
@@ -761,6 +927,7 @@
     <span class="n">stats</span><span class="o">.</span><span class="n">skew</span><span class="p">,</span>
     <span class="n">stats</span><span class="o">.</span><span class="n">kurtosis</span><span class="p">,</span>
     <span class="n">tail_ratio</span><span class="p">,</span>
+    <span class="n">cagr</span>
 <span class="p">]</span>
 
 <span class="n">FACTOR_STAT_FUNCS</span> <span class="o">=</span> <span class="p">[</span>
@@ -801,7 +968,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.1.9',
+            VERSION:'0.1.10',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

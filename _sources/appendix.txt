@@ -17,3 +17,4 @@ API Reference
 .. autofunction:: empyrical.beta
 .. autofunction:: empyrical.stability_of_timeseries
 .. autofunction:: empyrical.tail_ratio
+.. autofunction:: empyrical.cagr
