@@ -39,7 +39,9 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
+    'numpydoc'
 ]
+
 
 # -- Docstrings ---------------------------------------------------------------
 
