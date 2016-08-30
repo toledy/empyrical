@@ -304,7 +304,7 @@ texinfo_documents = [
 # texinfo_no_detailmenu = False
 
 intersphinx_mapping = {
-    'http://docs.python.org/dev': None,
+    'python': ('http://docs.python.org/dev', None),
     'numpy': ('http://docs.scipy.org/doc/numpy/', None),
     'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
     'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),

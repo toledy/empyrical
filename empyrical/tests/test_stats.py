@@ -710,7 +710,6 @@ class TestStats(TestCase):
                 DECIMAL_PLACES
             )
 
-
     # Alpha/beta translation tests.
     @parameterized.expand([
         (0, .001),
