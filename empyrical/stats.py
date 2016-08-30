@@ -100,11 +100,11 @@ def cum_returns(returns, starting_value=0):
 
     :param pandas.Series returns: Returns of the strategy as a percentage,
         noncumulative. Time series with decimal returns. Example::
-          2015-07-16   -0.012143
-          2015-07-17    0.045350
-          2015-07-18    0.030957
-          2015-07-19    0.004902
-          Freq: D, dtype: float64
+            2015-07-16   -0.012143
+            2015-07-17    0.045350
+            2015-07-18    0.030957
+            2015-07-19    0.004902
+            Freq: D, dtype: float64
     :param starting_value: The starting returns.
     :type starting_value: float, optional
 
@@ -124,10 +124,6 @@ def cum_returns(returns, starting_value=0):
         returns = returns.copy()
         returns.iloc[0] = 0.
 
-    # For increased numerical accuracy, input is converted to log returns
-    # where it is possible to sum instead of multiplying.
-    # PI((1+r_i)) - 1 = exp(ln(PI(1+r_i)))     # x = exp(ln(x))
-    #                 = exp(SIGMA(ln(1+r_i))   # ln(a*b) = ln(a) + ln(b)
     df_cum = np.exp(np.log1p(returns).cumsum())
 
     if starting_value == 0:
@@ -139,9 +135,8 @@ def cum_returns(returns, starting_value=0):
 def aggregate_returns(returns, convert_to):
     """Aggregates returns by week, month, or year.
 
-    :param returns: Daily returns of the strategy, noncumulative.
+    :param pandas.Series returns: Daily returns of the strategy, noncumulative.
         See full explanation in :func:`~empyrical.cum_returns`.
-    :type returns: pandas.Series
     :param convert_to: Can be 'weekly', 'monthly', or 'yearly'.
     :type convert_to: str
 
@@ -407,7 +402,7 @@ def sortino_ratio(returns, required_return=0, period=DAILY,
         returns into annual returns. Value should be the annual frequency of
         `returns`.
     :type annualization: int, optional
-    :param _downside_risk : float, optional
+    :param _downside_risk: float, optional
         The downside risk of the given inputs, if known. Will be calculated if
         not provided.
     :type _downside_risk: float, optional
