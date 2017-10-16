@@ -818,7 +818,7 @@ def alpha_aligned(returns, factor_returns, risk_free=0.0, period=DAILY,
     adj_factor_returns = _adjust_returns(factor_returns, risk_free)
     alpha_series = adj_returns - (_beta * adj_factor_returns)
 
-    return nanmean(alpha_series) * ann_factor
+    return (nanmean(alpha_series) + 1) ** ann_factor - 1
 
 
 def beta(returns, factor_returns, risk_free=0.0):
