@@ -20,7 +20,7 @@ import numpy as np
 from scipy import stats
 from six import iteritems
 
-from .utils import nanmean, nanstd, nanmin, up, down, roll
+from .utils import nanmean, nanstd, nanmin, up, down, roll, annualize
 from .periods import ANNUALIZATION_FACTORS, APPROX_BDAYS_PER_YEAR
 from .periods import DAILY, WEEKLY, MONTHLY, YEARLY
 
@@ -818,7 +818,7 @@ def alpha_aligned(returns, factor_returns, risk_free=0.0, period=DAILY,
     adj_factor_returns = _adjust_returns(factor_returns, risk_free)
     alpha_series = adj_returns - (_beta * adj_factor_returns)
 
-    return (nanmean(alpha_series) + 1) ** ann_factor - 1
+    return annualize(nanmean(alpha_series), ann_factor)
 
 
 def beta(returns, factor_returns, risk_free=0.0):

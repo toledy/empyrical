@@ -443,3 +443,10 @@ def default_returns_func(symbol, start=None, end=None):
         rets = get_symbol_returns_from_yahoo(symbol, start=start, end=end)
 
     return rets[symbol]
+
+
+def annualize(stat, ann_factor=252):
+    """
+    Annualizes the given statistic based on `ann_factor`.
+    """
+    return (stat + 1) ** ann_factor - 1
