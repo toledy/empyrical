@@ -445,7 +445,7 @@ def default_returns_func(symbol, start=None, end=None):
     return rets[symbol]
 
 
-def annualize(stat, ann_factor=252):
+def annualize_compounding(stat, ann_factor=252):
     """
     Annualizes the given statistic based on `ann_factor`.
     """
