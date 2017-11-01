@@ -449,4 +449,5 @@ def annualize_compounding(stat, ann_factor=252):
     """
     Annualizes the given statistic based on `ann_factor`.
     """
-    return np.float64(stat + 1) ** np.float64(ann_factor) - 1
+    # use np.float64 to avoid overflow errors
+    return np.float64(stat + 1) ** ann_factor - 1
